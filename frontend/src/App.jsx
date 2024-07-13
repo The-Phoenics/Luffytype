@@ -15,7 +15,6 @@ function App() {
 
   useEffect(() => {
     const keyPressEL = document.addEventListener("keypress", (e) => {
-      console.log(e.keyCode);
       handleKeyPress(e.key, wordsElementRef);
     });
 
