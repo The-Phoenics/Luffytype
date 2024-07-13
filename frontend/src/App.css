@@ -1,0 +1,12 @@
+.letter-typed-correct {
+    background: green;
+}
+
+.letter-typed-incorrect {
+    background: red;
+}
+
+.letter-pending {
+    background: #444;
+    color: blue;
+}
