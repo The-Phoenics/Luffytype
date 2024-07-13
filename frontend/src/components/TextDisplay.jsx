@@ -9,7 +9,10 @@ function Word({ word, isWhiteSpace }) {
 }
 
 function Letter({ letter, isWhiteSpace }) {
-  return <div className={`text-white text-xl min-w-[10px] ${isWhiteSpace ? "whitespace-element" : "letter-pending"}`}>{letter}</div>;
+  return <div className={`text-2xl font-bold min-w-[10px] relative ${isWhiteSpace ? "whitespace-element" : "letter-pending"}`}>{letter}
+    {/* rhis is for cursor */}
+    <span></span>
+  </div>;
 }
 
 const TextDisplay = ({ wordsElementRef }) => {
@@ -19,7 +22,7 @@ const TextDisplay = ({ wordsElementRef }) => {
   return (
     <div
       ref={wordsElementRef}
-      className="w-[80%] min-w-[370px] bg-slate-500 flex gap-4 flex-wrap"
+      className="w-[80%] min-w-[370px] flex gap-4 flex-wrap"
     >
       {text.split(" ").map((word, index) => {
         return (

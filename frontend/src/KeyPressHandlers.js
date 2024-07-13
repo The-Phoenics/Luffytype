@@ -1,9 +1,11 @@
 import { data } from "./App";
 import {
+  addCursor,
   onLetterPending,
   onLetterTypedCorrect,
   onLetterTypedIncorrect,
   onSpacePending,
+  removeCursor,
 } from "./TextUtils";
 
 export const handleBackSpace = (wordsElementRef) => {
@@ -14,11 +16,13 @@ export const handleBackSpace = (wordsElementRef) => {
 
     // at whitespace element
     if (currLetterElement.classList.contains("whitespace-element")) {
+      removeCursor(currLetterElement);
       data.currentWord--;
       currWordElement = wordsElementRef.current.childNodes[data.currentWord];
       data.letterCountInCurrentWord = currWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
       currLetterElement = currWordElement.childNodes[data.currentLetter];
+      addCursor(currLetterElement);
       onLetterPending(currLetterElement);
       onSpacePending(currLetterElement);
       return;
@@ -26,6 +30,7 @@ export const handleBackSpace = (wordsElementRef) => {
 
     // at first letter of word element
     if (data.currentLetter == 0) {
+      removeCursor(currLetterElement)
       onLetterPending(currLetterElement);
       data.currentWord--;
       currWordElement = wordsElementRef.current.childNodes[data.currentWord];
@@ -36,17 +41,18 @@ export const handleBackSpace = (wordsElementRef) => {
       return;
     }
 
-    //..
-    onLetterPending(currLetterElement)
+    removeCursor(currLetterElement)
+    onLetterPending(currLetterElement);
     data.currentLetter--;
     currLetterElement = currWordElement.childNodes[data.currentLetter];
+    addCursor(currLetterElement);
     onLetterPending(currLetterElement);
   }
 };
 
 export const handleKeyPress = (pressedKeyValue, wordsElementRef) => {
-  const currWordElement = wordsElementRef.current.childNodes[data.currentWord];
-  const currLetterElement = currWordElement.childNodes[data.currentLetter];
+  let currWordElement = wordsElementRef.current.childNodes[data.currentWord];
+  let currLetterElement = currWordElement.childNodes[data.currentLetter];
   data.letterCountInCurrentWord = currWordElement.childNodes.length;
   const correct = currLetterElement.innerText === pressedKeyValue;
 
@@ -66,6 +72,8 @@ export const handleKeyPress = (pressedKeyValue, wordsElementRef) => {
       onLetterTypedIncorrect(currLetterElement);
     }
   }
+  // add cursor from previous letter element
+  removeCursor(currLetterElement);
 
   // update data
   data.currentLetter = data.currentLetter + 1;
@@ -77,4 +85,9 @@ export const handleKeyPress = (pressedKeyValue, wordsElementRef) => {
     data.currentLetter = 0;
     data.letterCountInCurrentWord = 0;
   }
+
+  // add cursor to current letter element
+  currWordElement = wordsElementRef.current.childNodes[data.currentWord];
+  currLetterElement = currWordElement.childNodes[data.currentLetter];
+  addCursor(currLetterElement);
 };

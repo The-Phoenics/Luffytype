@@ -20,3 +20,12 @@ export function onSpacePending(letterElement) {
   letterElement.classList.remove("letter-typed-correct");
   letterElement.classList.remove("letter-typed-incorrect");
 }
+
+export function addCursor(letterElement) {
+  // first child node is text node
+  letterElement.childNodes[1].classList.add("cursor");
+}
+
+export function removeCursor(letterElement) {
+  letterElement.childNodes[1].classList.remove("cursor");
+}

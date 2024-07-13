@@ -1,12 +1,34 @@
 .letter-typed-correct {
-    background: green;
+  color: #00ff00;
 }
 
 .letter-typed-incorrect {
-    background: red;
+  color: #ff0000;
 }
 
 .letter-pending {
-    background: #444;
-    color: blue;
+    /* background-color: red; */
+}
+
+@keyframes cursor-blink {
+  0% {
+    opacity: 30%;
+  }
+
+  30% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+.cursor {
+    background: #fff200dd;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: cursor-blink 1000ms ease-out  infinite;
 }

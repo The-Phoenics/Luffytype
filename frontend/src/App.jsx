@@ -3,6 +3,7 @@ import {  useEffect, useRef } from "react";
 import TopBar from "./components/TopBar";
 import TextDisplay from "./components/TextDisplay";
 import { handleKeyPress, handleBackSpace } from "./KeyPressHandlers";
+import { addCursor } from "./TextUtils";
 
 export let data = {
   currentWord: 0,
@@ -24,6 +25,9 @@ function App() {
       }
     });
 
+    // initailize cursor at first letter
+    addCursor(wordsElementRef.current.childNodes[0].childNodes[0])
+
     return () => {
       document.removeEventListener("keypress", keyPressEL);
       document.removeEventListener("keydown", keyDownEL);
@@ -36,7 +40,7 @@ function App() {
         <div className="absolute top-[1vh] left-0 w-full border min-h-[50px] flex items-center justify-center bg-red">
           <TopBar />
         </div>
-        <main className="w-full border flex justify-center  h-full">
+        <main className="w-full flex justify-center  h-full">
           <TextDisplay wordsElementRef={wordsElementRef} />
         </main>
         <div className="absolute bottom-[1vh] left-0 w-full border min-h-[50px] flex items-center justify-center bg-red">
