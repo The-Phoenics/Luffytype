@@ -1,4 +1,4 @@
-import { data } from "./App";
+import { data } from "./Data";
 import {
   addCursor,
   onLetterPending,
@@ -30,7 +30,7 @@ export const handleBackSpace = (wordsElementRef) => {
 
     // at first letter of word element
     if (data.currentLetter == 0) {
-      removeCursor(currLetterElement)
+      removeCursor(currLetterElement);
       onLetterPending(currLetterElement);
       data.currentWord--;
       currWordElement = wordsElementRef.current.childNodes[data.currentWord];
@@ -41,7 +41,7 @@ export const handleBackSpace = (wordsElementRef) => {
       return;
     }
 
-    removeCursor(currLetterElement)
+    removeCursor(currLetterElement);
     onLetterPending(currLetterElement);
     data.currentLetter--;
     currLetterElement = currWordElement.childNodes[data.currentLetter];

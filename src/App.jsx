@@ -1,15 +1,9 @@
 import "./App.css";
-import {  useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import TopBar from "./components/TopBar";
 import TextDisplay from "./components/TextDisplay";
 import { handleKeyPress, handleBackSpace } from "./KeyPressHandlers";
 import { addCursor } from "./TextUtils";
-
-export let data = {
-  currentWord: 0,
-  currentLetter: 0,
-  letterCountInCurrentWord: 0,
-};
 
 function App() {
   const wordsElementRef = useRef();
@@ -26,7 +20,7 @@ function App() {
     });
 
     // initailize cursor at first letter
-    addCursor(wordsElementRef.current.childNodes[0].childNodes[0])
+    addCursor(wordsElementRef.current.childNodes[0].childNodes[0]);
 
     return () => {
       document.removeEventListener("keypress", keyPressEL);
