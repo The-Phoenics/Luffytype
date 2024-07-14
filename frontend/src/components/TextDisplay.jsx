@@ -1,6 +1,6 @@
 function Word({ word, isWhiteSpace }) {
   return (
-    <div className="flex">
+    <div className={`flex ${isWhiteSpace ? "" : "m-2 mr-0 ml-0"}`}>
       {word.split("").map((letter, index) => {
         return <Letter key={index} letter={letter} isWhiteSpace={isWhiteSpace}  />;
       })}
@@ -9,7 +9,7 @@ function Word({ word, isWhiteSpace }) {
 }
 
 function Letter({ letter, isWhiteSpace }) {
-  return <div className={`text-2xl font-bold min-w-[10px] relative ${isWhiteSpace ? "whitespace-element" : "letter-pending"}`}>{letter}
+  return <div className={` text-[2.5vw] font-medium min-w-[12px] font-NerdFont relative ${isWhiteSpace ? "whitespace-element" : "letter-pending mr-[1px]"}`}>{letter}
     {/* rhis is for cursor */}
     <span></span>
   </div>;
@@ -22,7 +22,7 @@ const TextDisplay = ({ wordsElementRef }) => {
   return (
     <div
       ref={wordsElementRef}
-      className="w-[80%] min-w-[370px] flex gap-4 flex-wrap"
+      className="w-[80%] min-w-[370px] max-w-[70vw]  flex justify-center items-center gap-1 flex-wrap max-h-[30vh] p-2 overflow-y-scroll"
     >
       {text.split(" ").map((word, index) => {
         return (

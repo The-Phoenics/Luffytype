@@ -8,6 +8,9 @@ export default {
     extend: {
       colors: {
         background: "#222222",
+      },
+      fontFamily: {
+        'NerdFont': [ "ProtoNerdFontMono" ]
       }
     },
   },
