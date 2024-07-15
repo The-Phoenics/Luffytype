@@ -7,7 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#222222",
+        background: "#001d29",
+        textpending: "#819198",
+        textcorrect: "#ffd56b",
+        texterror: "#ff4747",
       },
       fontFamily: {
         'NerdFont': [ "ProtoNerdFontMono" ]

@@ -1,13 +1,14 @@
 .letter-typed-correct {
-  color: #00ff00;
+  color: #ffd56b;
 }
 
 .letter-typed-incorrect {
-  color: #ff0000;
+  color: #ff4747;
 }
 
 .letter-pending {
     /* background-color: red; */
+    color: #819198;
 }
 
 @keyframes cursor-blink {

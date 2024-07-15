@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { resetData } from "../Data";
+import { GResetData } from "../Data";
 
 function Word({ word, isWhiteSpace }) {
   return (
@@ -12,8 +12,8 @@ function Word({ word, isWhiteSpace }) {
 }
 
 function Letter({ letter, isWhiteSpace }) {
-  return <div className={`text-[clamp(1.2em,2.5vw,100vw)] font-medium min-w-[12px] font-NerdFont relative ${isWhiteSpace ? "whitespace-element" : "letter-pending mr-[1px]"}`}>{letter}
-    {/* rhis is for cursor */}
+  return  <div className={`text-[clamp(1.2em,2.5vw,100vw)] font-medium min-w-[12px] font-NerdFont relative ${isWhiteSpace ? "whitespace-element" : "letter-pending mr-[1px]"}`}>{letter}
+    {/* this is for cursor */}
     <span></span>
   </div>;
 }
@@ -29,13 +29,13 @@ const TextDisplay = ({ wordsElementRef }) => {
 
   useEffect(() => {
     fetchTypingText();
-    resetData();
+    GResetData();
   }, [])
 
   return (
     <div
       ref={wordsElementRef}
-      className="w-[80%] min-w-[370px] max-w-[70vw]  flex justify-center items-center gap-1 flex-wrap max-h-[30vh] p-2 overflow-y-hidden"
+      className="w-[80%] min-w-[370px] max-w-[70vw] flex justify-center items-center gap-1 flex-wrap max-h-[30vh] p-2 overflow-y-hidden"
     >
       {text.map((word, index) => {
         return (

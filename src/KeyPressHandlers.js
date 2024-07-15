@@ -1,4 +1,4 @@
-import { data } from "./Data";
+import { GData as data } from "./Data";
 import {
   addCursor,
   onLetterPending,
@@ -38,6 +38,13 @@ export const handleBackSpace = (wordsElementRef) => {
       data.currentLetter = data.letterCountInCurrentWord - 1;
       currLetterElement = currWordElement.childNodes[data.currentLetter];
       onSpacePending(currLetterElement);
+      return;
+    }
+
+    // deleting the current word
+    if (data.isCtrlKeyHeldDown) {
+      removeCursor(currLetterElement);
+      handleCtrlBackspace(currWordElement);
       return;
     }
 
@@ -89,5 +96,14 @@ export const handleKeyPress = (pressedKeyValue, wordsElementRef) => {
   // add cursor to current letter element
   currWordElement = wordsElementRef.current.childNodes[data.currentWord];
   currLetterElement = currWordElement.childNodes[data.currentLetter];
+  addCursor(currLetterElement);
+};
+
+export const handleCtrlBackspace = (currWordElement) => {
+  data.currentLetter = 0;
+  currWordElement.childNodes.forEach((letter) => {
+    onLetterPending(letter);
+  });
+  const currLetterElement = currWordElement.childNodes[0];
   addCursor(currLetterElement);
 };

@@ -2,7 +2,7 @@ import React from 'react'
 
 const TopBar = () => {
   return (
-    <div>TopBar</div>
+    <div className='font-bold'>Top Bar</div>
   )
 }
 
