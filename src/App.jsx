@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useRef } from "react";
 import TopBar from "./components/TopBar";
 import TextDisplay from "./components/TextDisplay";
-import { handleKeyPress, handleBackSpace } from "./KeyPressHandlers";
+import { GHandleLetterKeyPress, GHandleBackSpaceKeyPress } from "./KeyPressHandlers";
 import { GAddCursor } from "./TextUtils";
 import { GToggleCtrlHeldDown } from "./Data";
 
@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     const keyPressEL = document.addEventListener("keypress", (e) => {
-      handleKeyPress(e.key, wordsElementRef);
+      GHandleLetterKeyPress(e.key, wordsElementRef);
     });
 
     const ctrlKeyUpEL = document.addEventListener("keyup", (e) => {
@@ -22,7 +22,7 @@ function App() {
 
     const keyDownEL = document.addEventListener("keydown", (e) => {
       if (e.key === "Backspace") {
-        handleBackSpace(wordsElementRef);
+        GHandleBackSpaceKeyPress(wordsElementRef);
       }
       if (e.key === "Control") {
         GToggleCtrlHeldDown();
@@ -34,7 +34,7 @@ function App() {
 
     return () => {
       document.removeEventListener("keypress", keyPressEL);
-      document.removeEventListener("keyup", keyDownEL);
+      document.removeEventListener("keyup", ctrlKeyUpEL);
       document.removeEventListener("keydown", keyDownEL);
     };
   }, []);
