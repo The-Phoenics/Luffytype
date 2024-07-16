@@ -1,11 +1,11 @@
 import { GData as data } from "./Data";
 import {
-  addCursor,
-  onLetterPending,
-  onLetterTypedCorrect,
-  onLetterTypedIncorrect,
-  onSpacePending,
-  removeCursor,
+  GAddCursor,
+  GStyleLetterAsPending,
+  GStyleLetterAsCorrect,
+  GStyleLetterAsIncorrect,
+  GStyleSpaceLetterPending,
+  GRemoveCursor,
 } from "./TextUtils";
 
 export const handleBackSpace = (wordsElementRef) => {
@@ -16,44 +16,44 @@ export const handleBackSpace = (wordsElementRef) => {
 
     // at whitespace element
     if (currLetterElement.classList.contains("whitespace-element")) {
-      removeCursor(currLetterElement);
+      GRemoveCursor(currLetterElement);
       data.currentWord--;
       currWordElement = wordsElementRef.current.childNodes[data.currentWord];
       data.letterCountInCurrentWord = currWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
       currLetterElement = currWordElement.childNodes[data.currentLetter];
-      addCursor(currLetterElement);
-      onLetterPending(currLetterElement);
-      onSpacePending(currLetterElement);
+      GAddCursor(currLetterElement);
+      GStyleLetterAsPending(currLetterElement);
+      GStyleSpaceLetterPending(currLetterElement);
       return;
     }
 
     // at first letter of word element
     if (data.currentLetter == 0) {
-      removeCursor(currLetterElement);
-      onLetterPending(currLetterElement);
+      GRemoveCursor(currLetterElement);
+      GStyleLetterAsPending(currLetterElement);
       data.currentWord--;
       currWordElement = wordsElementRef.current.childNodes[data.currentWord];
       data.letterCountInCurrentWord = currWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
       currLetterElement = currWordElement.childNodes[data.currentLetter];
-      onSpacePending(currLetterElement);
+      GStyleSpaceLetterPending(currLetterElement);
       return;
     }
 
     // deleting the current word
     if (data.isCtrlKeyHeldDown) {
-      removeCursor(currLetterElement);
+      GRemoveCursor(currLetterElement);
       handleCtrlBackspace(currWordElement);
       return;
     }
 
-    removeCursor(currLetterElement);
-    onLetterPending(currLetterElement);
+    GRemoveCursor(currLetterElement);
+    GStyleLetterAsPending(currLetterElement);
     data.currentLetter--;
     currLetterElement = currWordElement.childNodes[data.currentLetter];
-    addCursor(currLetterElement);
-    onLetterPending(currLetterElement);
+    GAddCursor(currLetterElement);
+    GStyleLetterAsPending(currLetterElement);
   }
 };
 
@@ -67,20 +67,20 @@ export const handleKeyPress = (pressedKeyValue, wordsElementRef) => {
   if (currLetterElement.classList.contains("whitespace-element")) {
     // for whitespace elements
     if (pressedKeyValue === " ") {
-      onLetterTypedCorrect(currLetterElement);
+      GStyleLetterAsCorrect(currLetterElement);
     } else {
-      onLetterTypedIncorrect(currLetterElement);
+      GStyleLetterAsIncorrect(currLetterElement);
     }
   } else {
     // for letter elements
     if (correct) {
-      onLetterTypedCorrect(currLetterElement);
+      GStyleLetterAsCorrect(currLetterElement);
     } else {
-      onLetterTypedIncorrect(currLetterElement);
+      GStyleLetterAsIncorrect(currLetterElement);
     }
   }
   // add cursor from previous letter element
-  removeCursor(currLetterElement);
+  GRemoveCursor(currLetterElement);
 
   // update data
   data.currentLetter = data.currentLetter + 1;
@@ -96,14 +96,14 @@ export const handleKeyPress = (pressedKeyValue, wordsElementRef) => {
   // add cursor to current letter element
   currWordElement = wordsElementRef.current.childNodes[data.currentWord];
   currLetterElement = currWordElement.childNodes[data.currentLetter];
-  addCursor(currLetterElement);
+  GAddCursor(currLetterElement);
 };
 
 export const handleCtrlBackspace = (currWordElement) => {
   data.currentLetter = 0;
   currWordElement.childNodes.forEach((letter) => {
-    onLetterPending(letter);
+    GStyleLetterAsPending(letter);
   });
   const currLetterElement = currWordElement.childNodes[0];
-  addCursor(currLetterElement);
+  GAddCursor(currLetterElement);
 };

@@ -1,31 +1,31 @@
-export function onLetterTypedCorrect(letterElement) {
+export function GStyleLetterAsCorrect(letterElement) {
   letterElement.classList.remove("letter-pending");
   letterElement.classList.add("letter-typed-correct");
   letterElement.classList.remove("letter-typed-incorrect");
 }
 
-export function onLetterTypedIncorrect(letterElement) {
+export function GStyleLetterAsIncorrect(letterElement) {
   letterElement.classList.remove("letter-pending");
   letterElement.classList.remove("letter-typed-correct");
   letterElement.classList.add("letter-typed-incorrect");
 }
 
-export function onLetterPending(letterElement) {
+export function GStyleLetterAsPending(letterElement) {
   letterElement.classList.add("letter-pending");
   letterElement.classList.remove("letter-typed-correct");
   letterElement.classList.remove("letter-typed-incorrect");
 }
 
-export function onSpacePending(letterElement) {
+export function GStyleSpaceLetterPending(letterElement) {
   letterElement.classList.remove("letter-typed-correct");
   letterElement.classList.remove("letter-typed-incorrect");
 }
 
-export function addCursor(letterElement) {
+export function GAddCursor(letterElement) {
   // first child node is text node
   letterElement.childNodes[1].classList.add("cursor");
 }
 
-export function removeCursor(letterElement) {
+export function GRemoveCursor(letterElement) {
   letterElement.childNodes[1].classList.remove("cursor");
 }

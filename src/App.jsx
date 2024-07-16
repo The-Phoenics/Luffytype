@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import TopBar from "./components/TopBar";
 import TextDisplay from "./components/TextDisplay";
 import { handleKeyPress, handleBackSpace } from "./KeyPressHandlers";
-import { addCursor } from "./TextUtils";
+import { GAddCursor } from "./TextUtils";
 import { GToggleCtrlHeldDown } from "./Data";
 
 function App() {
@@ -15,8 +15,9 @@ function App() {
     });
 
     const ctrlKeyUpEL = document.addEventListener("keyup", (e) => {
-      console.log("key up");
-      GToggleCtrlHeldDown();
+      if (e.key === "Control") {
+        GToggleCtrlHeldDown();
+      }
     });
 
     const keyDownEL = document.addEventListener("keydown", (e) => {
@@ -24,13 +25,12 @@ function App() {
         handleBackSpace(wordsElementRef);
       }
       if (e.key === "Control") {
-        console.log("key down");
         GToggleCtrlHeldDown();
       }
     });
 
     // initailize cursor at first letter
-    addCursor(wordsElementRef.current.childNodes[0].childNodes[0]);
+    GAddCursor(wordsElementRef.current.childNodes[0].childNodes[0]);
 
     return () => {
       document.removeEventListener("keypress", keyPressEL);
