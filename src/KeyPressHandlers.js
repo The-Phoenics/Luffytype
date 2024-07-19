@@ -1,4 +1,4 @@
-import { GData as data } from "./Data";
+import { GData as data, GResetData } from "./Data";
 import {
   GAddCursor,
   GStyleLetterAsPending,
@@ -6,12 +6,13 @@ import {
   GStyleLetterAsIncorrect,
   GStyleSpaceLetterPending,
   GRemoveCursor,
+  GMakeSpaceElementIncorrect,
 } from "./TextUtils";
 
 export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
   // check for cursor at first letter and first work
   if (!(data.currentWord == 0 && data.currentLetter == 0)) {
-    let currentWordElement = wordsElementRef.current.childNodes[data.currentWord];
+    let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
     let currentLetterElement = currentWordElement.childNodes[data.currentLetter];
 
     // at whitespace element
@@ -19,7 +20,7 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
       // hop to previous word
       GRemoveCursor(currentLetterElement);
       data.currentWord--;
-      currentWordElement = wordsElementRef.current.childNodes[data.currentWord];
+      currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
       data.letterCountInCurrentWord = currentWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
       currentLetterElement = currentWordElement.childNodes[data.currentLetter];
@@ -35,7 +36,7 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
       GRemoveCursor(currentLetterElement);
       GStyleLetterAsPending(currentLetterElement);
       data.currentWord--;
-      currentWordElement = wordsElementRef.current.childNodes[data.currentWord];
+      currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
       data.letterCountInCurrentWord = currentWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
       currentLetterElement = currentWordElement.childNodes[data.currentLetter];
@@ -61,46 +62,55 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
 };
 
 export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef) => {
-  let currentWordElement = wordsElementRef.current.childNodes[data.currentWord];
-  let currentLetterElement = currentWordElement.childNodes[data.currentLetter];
-  data.letterCountInCurrentWord = currentWordElement.childNodes.length;
-  const correct = currentLetterElement.innerText === pressedKeyValue;
+  // handle letter element
+  if (!data.isAtSpaceElement) {
+    let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
+    let currentLetterElement = currentWordElement.childNodes[data.currentLetter];
+    data.letterCountInCurrentWord = currentWordElement.childNodes.length;
+    GRemoveCursor(currentLetterElement);
 
-  if (currentLetterElement.classList.contains("whitespace-element")) {
-    // for whitespace elements
+    if (pressedKeyValue == currentLetterElement.innerText) {
+      GStyleLetterAsCorrect(currentLetterElement);
+    } else {
+      GStyleLetterAsIncorrect(currentLetterElement);
+    }
+
+    data.currentLetter++;
+    if (data.letterCountInCurrentWord === data.currentLetter) {
+      data.isAtSpaceElement = true;
+      currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[1];
+      currentLetterElement = currentWordElement.childNodes[0];
+      GAddCursor(currentLetterElement);
+    } else {
+      currentLetterElement = currentWordElement.childNodes[data.currentLetter];
+      GAddCursor(currentLetterElement);
+    }
+  }
+
+  // handle space element
+  else {
+    let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[1];
+    let currentLetterElement = currentWordElement.childNodes[0];
+
+    GRemoveCursor(currentLetterElement);
     if (pressedKeyValue === " ") {
       GStyleLetterAsCorrect(currentLetterElement);
     } else {
-      GStyleLetterAsIncorrect(currentLetterElement);
+      GMakeSpaceElementIncorrect(currentLetterElement);
     }
-  } else {
-    // for letter elements
-    if (correct) {
-      GStyleLetterAsCorrect(currentLetterElement);
-    } else {
-      GStyleLetterAsIncorrect(currentLetterElement);
-    }
-  }
-  // add cursor from previous letter element
-  GRemoveCursor(currentLetterElement);
 
-  // update data
-  data.currentLetter = data.currentLetter + 1;
-
-  // hop to next word
-  if (data.letterCountInCurrentWord === data.currentLetter) {
-    // moveToNextWord
-    data.currentWord = data.currentWord + 1;
+    data.currentWord++;
     data.currentLetter = 0;
-    data.letterCountInCurrentWord = 0;
-    currentWordElement = wordsElementRef.current.childNodes[data.currentWord];
-    FocusScrollCurrentWord(currentWordElement);
-  }
+    data.isAtSpaceElement = false;
 
-  // add cursor to current letter element
-  currentWordElement = wordsElementRef.current.childNodes[data.currentWord];
-  currentLetterElement = currentWordElement.childNodes[data.currentLetter];
-  GAddCursor(currentLetterElement);
+    currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
+    currentLetterElement = currentWordElement.childNodes[data.currentLetter];
+    data.letterCountInCurrentWord = currentWordElement.childNodes.length;
+    GAddCursor(currentLetterElement);
+    if (data.currentWord > 4) {
+      FocusScrollCurrentWord(currentWordElement);
+    }
+  }
 };
 
 const HandleCtrlBackspace = (currentWordElement) => {

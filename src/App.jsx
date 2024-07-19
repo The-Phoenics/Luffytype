@@ -30,7 +30,7 @@ function App() {
     });
 
     // initailize cursor at first letter
-    GAddCursor(wordsElementRef.current.childNodes[0].childNodes[0]);
+    GAddCursor(wordsElementRef.current.childNodes[0].childNodes[0].childNodes[0]);
 
     return () => {
       document.removeEventListener("keypress", keyPressEL);

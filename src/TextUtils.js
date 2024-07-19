@@ -10,6 +10,11 @@ export function GStyleLetterAsIncorrect(letterElement) {
   letterElement.classList.add("letter-typed-incorrect");
 }
 
+export function GMakeSpaceElementIncorrect(letterElement) {
+  letterElement.innerText = "_"
+  GStyleLetterAsIncorrect(letterElement);
+}
+
 export function GStyleLetterAsPending(letterElement) {
   letterElement.classList.add("letter-pending");
   letterElement.classList.remove("letter-typed-correct");
