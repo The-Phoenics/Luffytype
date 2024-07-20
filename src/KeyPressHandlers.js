@@ -16,18 +16,20 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
     let currentLetterElement = currentWordElement.childNodes[data.currentLetter];
 
     // at whitespace element
-    if (currentLetterElement.classList.contains("whitespace-element")) {
-      // hop to previous word
+    if (data.isAtSpaceElement) {
+      currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[1];
+      currentLetterElement = currentWordElement.childNodes[0];
       GRemoveCursor(currentLetterElement);
-      data.currentWord--;
+      GStyleSpaceLetterPending(currentLetterElement);
+      // data.currentWord--;
       currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
       data.letterCountInCurrentWord = currentWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
       currentLetterElement = currentWordElement.childNodes[data.currentLetter];
+      data.isAtSpaceElement = false;
+
       GAddCursor(currentLetterElement);
       GStyleLetterAsPending(currentLetterElement);
-      GStyleSpaceLetterPending(currentLetterElement);
-      FocusScrollCurrentWord(currentWordElement);
       return;
     }
 
@@ -36,11 +38,26 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
       GRemoveCursor(currentLetterElement);
       GStyleLetterAsPending(currentLetterElement);
       data.currentWord--;
+      data.isAtSpaceElement = true;
+
+      // set letter count
       currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
+      currentLetterElement = currentWordElement.childNodes[0];
       data.letterCountInCurrentWord = currentWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
-      currentLetterElement = currentWordElement.childNodes[data.currentLetter];
+
+      // update the space element
+      currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[1];
+      currentLetterElement = currentWordElement.childNodes[0];
+      if (currentLetterElement.innerText == "_") {
+        currentLetterElement.innerHTML = "&nbsp;<span></span>";
+      }
       GStyleSpaceLetterPending(currentLetterElement);
+      GAddCursor(currentLetterElement);
+
+      // Focus scoll on the previous word element
+      currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
+      FocusScrollCurrentWord(currentWordElement)
       return;
     }
 
@@ -67,6 +84,7 @@ export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef) => {
     let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
     let currentLetterElement = currentWordElement.childNodes[data.currentLetter];
     data.letterCountInCurrentWord = currentWordElement.childNodes.length;
+    // remove cursor from current letter element
     GRemoveCursor(currentLetterElement);
 
     if (pressedKeyValue == currentLetterElement.innerText) {
@@ -78,16 +96,18 @@ export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef) => {
     data.currentLetter++;
     if (data.letterCountInCurrentWord === data.currentLetter) {
       data.isAtSpaceElement = true;
+      // add cursor to whitespace element
       currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[1];
       currentLetterElement = currentWordElement.childNodes[0];
       GAddCursor(currentLetterElement);
     } else {
       currentLetterElement = currentWordElement.childNodes[data.currentLetter];
+      // add cursor to next letter element
       GAddCursor(currentLetterElement);
     }
   }
 
-  // handle space element
+  // handle key press while at space element
   else {
     let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[1];
     let currentLetterElement = currentWordElement.childNodes[0];

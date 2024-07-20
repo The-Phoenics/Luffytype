@@ -11,8 +11,8 @@ export function GStyleLetterAsIncorrect(letterElement) {
 }
 
 export function GMakeSpaceElementIncorrect(letterElement) {
-  letterElement.innerText = "_"
-  GStyleLetterAsIncorrect(letterElement);
+  letterElement.textContent = "_";
+  letterElement.classList.add("letter-typed-incorrect");
 }
 
 export function GStyleLetterAsPending(letterElement) {
@@ -22,8 +22,8 @@ export function GStyleLetterAsPending(letterElement) {
 }
 
 export function GStyleSpaceLetterPending(letterElement) {
-  letterElement.classList.remove("letter-typed-correct");
-  letterElement.classList.remove("letter-typed-incorrect");
+  letterElement.childNodes[1].classList.remove("letter-typed-correct");
+  letterElement.childNodes[1].classList.remove("letter-typed-incorrect");
 }
 
 export function GAddCursor(letterElement) {

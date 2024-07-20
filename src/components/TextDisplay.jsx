@@ -20,7 +20,7 @@ function Letter({ letter, isWhiteSpace }) {
     >
       {letter}
       {/* this is for cursor */}
-      <span className=""></span>
+      <span></span>
     </span>
   );
 }
