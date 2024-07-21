@@ -10,6 +10,7 @@ export const GResetData = () => {
   GData.currentWord = 0;
   GData.currentLetter = 0;
   GData.letterCountInCurrentWord = 0;
+  GData.isCtrlKeyHeldDown = false;
   GData.isAtSpaceElement = false;
 };
 

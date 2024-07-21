@@ -33,3 +33,7 @@
     height: 100%;
     animation: cursor-blink 1000ms ease-out  infinite;
 }
+
+.words-element {
+  /* scroll-margin-top: 50px; */
+}

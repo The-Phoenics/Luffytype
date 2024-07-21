@@ -57,7 +57,7 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
 
       // Focus scoll on the previous word element
       currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
-      FocusScrollCurrentWord(currentWordElement)
+      FocusScrollCurrentWord(currentWordElement);
       return;
     }
 
@@ -142,11 +142,13 @@ const HandleCtrlBackspace = (currentWordElement) => {
   GAddCursor(currentLetterElement);
 };
 
-const FocusScrollCurrentWord = (currentWordElement) => {
+export const FocusScrollCurrentWord = (currentWordElement) => {
   if (currentWordElement) {
-    const letterElement = currentWordElement.childNodes[0];
-    if (!letterElement.classList.contains("whitespace-element")) {
-      currentWordElement.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      const letterElement = currentWordElement.childNodes[0];
+      if (!letterElement.classList.contains("whitespace-element")) {
+        currentWordElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
   }
 };

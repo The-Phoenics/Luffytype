@@ -1,17 +1,24 @@
 import "./App.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import TopBar from "./components/TopBar";
 import TextDisplay from "./components/TextDisplay";
 import { GHandleLetterKeyPress, GHandleBackSpaceKeyPress } from "./KeyPressHandlers";
 import { GAddCursor } from "./TextUtils";
-import { GToggleCtrlHeldDown } from "./Data";
+import { GResetData, GToggleCtrlHeldDown } from "./Data";
+import Footer from "./components/Footer";
 
 function App() {
   const wordsElementRef = useRef();
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     const keyPressEL = document.addEventListener("keypress", (e) => {
-      GHandleLetterKeyPress(e.key, wordsElementRef);
+      if (e.key === "Enter") {
+        GResetData();
+        setReset(prevResetVal => !prevResetVal);
+      } else {
+        GHandleLetterKeyPress(e.key, wordsElementRef);
+      }
     });
 
     const ctrlKeyUpEL = document.addEventListener("keyup", (e) => {
@@ -46,10 +53,10 @@ function App() {
           <TopBar />
         </div>
         <main className="w-full flex justify-center  h-full">
-          <TextDisplay wordsElementRef={wordsElementRef} />
+          <TextDisplay wordsElementRef={wordsElementRef} reset={reset} />
         </main>
         <div className="absolute bottom-[1vh] left-0 w-full min-h-[50px] flex items-center justify-center bg-red font-bold">
-          Bottom Bar
+          <Footer />
         </div>
       </div>
     </>
