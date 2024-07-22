@@ -6,6 +6,7 @@ import { GHandleLetterKeyPress, GHandleBackSpaceKeyPress } from "./KeyPressHandl
 import { GAddCursor } from "./TextUtils";
 import { GResetData, GToggleCtrlHeldDown } from "./Data";
 import Footer from "./components/Footer";
+import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "./KeyPressAudio";
 
 function App() {
   const wordsElementRef = useRef();
@@ -18,6 +19,7 @@ function App() {
         setReset(prevResetVal => !prevResetVal);
       } else {
         GHandleLetterKeyPress(e.key, wordsElementRef);
+        GPlayKeyPressAudio(e.key)
       }
     });
 
@@ -35,6 +37,9 @@ function App() {
         GToggleCtrlHeldDown();
       }
     });
+
+    // load key press audios
+    GLoadKeyPressAudios();
 
     // initailize cursor at first letter
     GAddCursor(wordsElementRef.current.childNodes[0].childNodes[0].childNodes[0]);

@@ -32,14 +32,12 @@ const TextDisplay = ({ wordsElementRef, reset }) => {
   let [fetching, setFetching] = useState(true);
 
   const fetchTypingText = async () => {
-    console.log('fetch called')
     const response = await fetch(`https://random-word-api.herokuapp.com/word?number=200`);
     if (response.ok) {
       const result = await response.json();
       setText(result);
       setFetching(false);
     } else {
-      console.log("Fetch failed setting dummy text!");
       setText(
         `Quisque eu mollis arcu. Vivamus viverra est velit, non mattis dui finibus ac. Suspendisse risus nisl, pharetra eu justo et, convallis maximus turpis. Aliquam turpis nunc, fermentum ut tincidunt in, sagittis nec enim. Aliquam egestas sollicitudin tellus non malesuada. In placerat eu nibh a lobortis. Sed in erat laoreet, sodales lorem sit amet, finibus quam. Nam lorem velit, viverra ut nisi in, egestas semper metus. Fusce id eleifend orci. Nulla orci arcu, aliquam a neque sit amet, malesuada commodo odio.`
       );
