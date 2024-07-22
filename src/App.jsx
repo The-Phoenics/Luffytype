@@ -11,15 +11,23 @@ import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "./KeyPressAudio";
 function App() {
   const wordsElementRef = useRef();
   const [reset, setReset] = useState(false);
+  const [isAudioOff, setIsAudioOff] = useState(false);
+  const isAudioOffRef = useRef(isAudioOff);
+
+  useEffect(() => {
+    isAudioOffRef.current = isAudioOff;
+  }, [isAudioOff]);
 
   useEffect(() => {
     const keyPressEL = document.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         GResetData();
-        setReset(prevResetVal => !prevResetVal);
+        setReset((prevResetVal) => !prevResetVal);
       } else {
         GHandleLetterKeyPress(e.key, wordsElementRef);
-        GPlayKeyPressAudio(e.key)
+        if (!isAudioOffRef.current) {
+          GPlayKeyPressAudio(e.key);
+        }
       }
     });
 
@@ -55,7 +63,7 @@ function App() {
     <>
       <div className="w-full min-h-screen overflow-x-hidden bg-background text-white flex items-center justify-center flex-col relative text-center">
         <div className="absolute top-[1vh] left-0 w-full min-h-[50px] flex items-center justify-center bg-red">
-          <TopBar />
+          <TopBar isAudioOff={isAudioOff} setIsAudioOff={setIsAudioOff} />
         </div>
         <main className="w-full flex justify-center  h-full">
           <TextDisplay wordsElementRef={wordsElementRef} reset={reset} />

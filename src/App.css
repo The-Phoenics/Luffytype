@@ -7,8 +7,8 @@
 }
 
 .letter-pending {
-    /* background-color: red; */
-    color: #819198;
+  /* background-color: red; */
+  color: #819198;
 }
 
 @keyframes cursor-blink {
@@ -25,13 +25,13 @@
 }
 
 .cursor {
-    background: #fff200dd;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    animation: cursor-blink 1000ms ease-out  infinite;
+  background: #fff200dd;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: cursor-blink 1000ms ease-out infinite;
 }
 
 .words-element {
