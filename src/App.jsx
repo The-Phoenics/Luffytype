@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     const keyPressEL = document.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
-        GResetData();
+        // GResetData();
         setReset((prevResetVal) => !prevResetVal);
       } else {
         GHandleLetterKeyPress(e.key, wordsElementRef);

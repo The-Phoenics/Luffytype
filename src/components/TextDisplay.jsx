@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { GResetData } from "../Data";
 import { FocusScrollCurrentWord } from "../KeyPressHandlers";
-import { GStyleLetterAsPending, GStyleSpaceLetterPending } from "../TextUtils";
+import { GData as data } from "../Data";
+import { GRemoveCursor, GStyleLetterAsPending } from "../TextUtils";
 
 function Word({ word, isWhiteSpace }) {
   return (
@@ -47,23 +48,39 @@ const TextDisplay = ({ wordsElementRef, reset }) => {
   useEffect(() => {
     fetchTypingText();
     GResetData();
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!fetching) {
-      setFetching(true)
+      setFetching(true);
       fetchTypingText();
+
+      // remove cursor styling from current element
+      const cursorElement =
+        wordsElementRef.current.childNodes[data.currentWord].childNodes[0].childNodes[
+          data.currentLetter
+        ];
+      GRemoveCursor(cursorElement);
+
+      for (let i = 0; i <= data.currentWord; i++) {
+        const wordContainer = wordsElementRef.current.childNodes[i];
+        // reset letter elements
+        wordContainer.childNodes[0].childNodes.forEach((letter) => {
+          GStyleLetterAsPending(letter);
+        });
+
+        // reset the space element
+        const spaceElement = wordContainer.childNodes[1];
+        if (spaceElement.childNodes[0].innerText === "_") {
+          spaceElement.childNodes[0].innerHTML = "&nbsp;<span></span>";
+        }
+        spaceElement.childNodes[0].classList.add("letter-pending");
+        spaceElement.childNodes[0].classList.remove("letter-typed-correct");
+        spaceElement.childNodes[0].classList.remove("letter-typed-incorrect");
+      }
+
       GResetData();
       FocusScrollCurrentWord(wordsElementRef.current.childNodes[0]);
-
-      // TODO: change styling of letters to pending
-      // wordsElementRef.current.childNodes.forEach((words => {
-      //   words.childNodes.forEach(letter => {
-      //     GStyleLetterAsPending(letter)
-      //     console.log(letter)
-      //   })
-      //   GStyleSpaceLetterPending(word[1])
-      // }))
     }
   }, [reset]);
 
@@ -76,7 +93,7 @@ const TextDisplay = ({ wordsElementRef, reset }) => {
         return (
           <span className="flex" key={index}>
             <Word word={word} isWhiteSpace={false} />
-            <Word word="&nbsp;" isWhiteSpace={true} />
+            <Word word=" " isWhiteSpace={true} />
           </span>
         );
       })}

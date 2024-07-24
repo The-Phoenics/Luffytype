@@ -7,6 +7,7 @@ import {
   GStyleSpaceLetterPending,
   GRemoveCursor,
   GMakeSpaceElementIncorrect,
+  GMakeSpaceElementCorrect,
 } from "./TextUtils";
 
 export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
@@ -21,7 +22,7 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
       currentLetterElement = currentWordElement.childNodes[0];
       GRemoveCursor(currentLetterElement);
       GStyleSpaceLetterPending(currentLetterElement);
-      // data.currentWord--;
+
       currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
       data.letterCountInCurrentWord = currentWordElement.childNodes.length;
       data.currentLetter = data.letterCountInCurrentWord - 1;
@@ -114,7 +115,7 @@ export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef) => {
 
     GRemoveCursor(currentLetterElement);
     if (pressedKeyValue === " ") {
-      GStyleLetterAsCorrect(currentLetterElement);
+      GMakeSpaceElementCorrect(currentLetterElement);
     } else {
       GMakeSpaceElementIncorrect(currentLetterElement);
     }
