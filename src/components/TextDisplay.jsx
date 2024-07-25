@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { GResetData } from "../Data";
 import { FocusScrollCurrentWord } from "../KeyPressHandlers";
 import { GData as data } from "../Data";
-import { GRemoveCursor, GStyleLetterAsPending } from "../TextUtils";
+import { GMakeSpaceElementPending, GRemoveCursor, GStyleLetterAsPending } from "../TextUtils";
 
 function Word({ word, isWhiteSpace }) {
   return (
@@ -29,20 +29,14 @@ function Letter({ letter, isWhiteSpace }) {
 }
 
 const TextDisplay = ({ wordsElementRef, reset }) => {
-  let [text, setText] = useState(["Loading..."]);
+  // let [text, setText] = useState(["Loading..."]);
+  let [text, setText] = useState("Loading...");
   let [fetching, setFetching] = useState(true);
 
   const fetchTypingText = async () => {
-    const response = await fetch(`https://random-word-api.herokuapp.com/word?number=200`);
-    if (response.ok) {
-      const result = await response.json();
-      setText(result);
-      setFetching(false);
-    } else {
-      setText(
-        `Quisque eu mollis arcu. Vivamus viverra est velit, non mattis dui finibus ac. Suspendisse risus nisl, pharetra eu justo et, convallis maximus turpis. Aliquam turpis nunc, fermentum ut tincidunt in, sagittis nec enim. Aliquam egestas sollicitudin tellus non malesuada. In placerat eu nibh a lobortis. Sed in erat laoreet, sodales lorem sit amet, finibus quam. Nam lorem velit, viverra ut nisi in, egestas semper metus. Fusce id eleifend orci. Nulla orci arcu, aliquam a neque sit amet, malesuada commodo odio.`
-      );
-    }
+    setText(
+      "Quisque eu mollis arcu. Vivamus viverra est velit, non mattis dui finibus ac. Suspendisse risus nisl, pharetra eu justo et, convallis maximus turpis. Aliquam turpis nunc, fermentum ut tincidunt in, sagittis nec enim. Aliquam egestas sollicitudin tellus non malesuada. In placerat eu nibh a lobortis. Sed in erat laoreet, sodales lorem sit amet, finibus quam. Nam lorem velit, viverra ut nisi in, egestas semper metus. Fusce id eleifend orci. Nulla orci arcu, aliquam a neque sit amet, malesuada commodo odio"
+    );
   };
 
   useEffect(() => {
@@ -71,12 +65,7 @@ const TextDisplay = ({ wordsElementRef, reset }) => {
 
         // reset the space element
         const spaceElement = wordContainer.childNodes[1];
-        if (spaceElement.childNodes[0].innerText === "_") {
-          spaceElement.childNodes[0].innerHTML = "&nbsp;<span></span>";
-        }
-        spaceElement.childNodes[0].classList.add("letter-pending");
-        spaceElement.childNodes[0].classList.remove("letter-typed-correct");
-        spaceElement.childNodes[0].classList.remove("letter-typed-incorrect");
+        GMakeSpaceElementPending(spaceElement);
       }
 
       GResetData();
@@ -89,7 +78,7 @@ const TextDisplay = ({ wordsElementRef, reset }) => {
       ref={wordsElementRef}
       className="w-[80%] words-element  min-w-[370px] max-w-[70vw] flex justify-center items-center gap-1 flex-wrap max-h-[30vh] p-2 overflow-y-hidden"
     >
-      {text.map((word, index) => {
+      {text.split(" ").map((word, index) => {
         return (
           <span className="flex" key={index}>
             <Word word={word} isWhiteSpace={false} />

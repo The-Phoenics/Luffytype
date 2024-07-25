@@ -4,7 +4,7 @@ import TopBar from "./components/TopBar";
 import TextDisplay from "./components/TextDisplay";
 import { GHandleLetterKeyPress, GHandleBackSpaceKeyPress } from "./KeyPressHandlers";
 import { GAddCursor } from "./TextUtils";
-import { GResetData, GToggleCtrlHeldDown } from "./Data";
+import {  GToggleCtrlHeldDown } from "./Data";
 import Footer from "./components/Footer";
 import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "./KeyPressAudio";
 

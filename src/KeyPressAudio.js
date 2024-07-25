@@ -14,7 +14,8 @@ export function GPlayKeyPressAudio(letter) {
   } else {
     letter = letter.toLowerCase();
     if (isLowerCaseAlphabet(letter)) {
-      audios.get(`${letter}`).cloneNode().play();
+      let audio = audios.get(`${letter}`);
+      audio.cloneNode().play();
     }
   }
 }
