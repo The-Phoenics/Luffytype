@@ -2,11 +2,30 @@ import { IoMdVolumeHigh } from "react-icons/io";
 import { IoMdVolumeOff } from "react-icons/io";
 import { useState } from "react";
 
-const TopBar = ({ isAudioOff, setIsAudioOff }) => {
+const TopBar = ({ isAudioOn, setIsAudioOn, isTyping }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currLang, setCurrLang] = useState("English");
 
-  useState(() => {}, [currLang, isOpen])
+  useState(() => {}, [currLang, isOpen]);
+
+  if (isTyping) {
+    return (
+      <div className="flex justify-between max-w-[1000px] flex-1 mt-2 ml-14 mr-14 min-w-[300px] font-medium text-[1.8em] items-center text-[#ffd56b]">
+        <div className="flex gap-1">
+          <h1>
+            83
+          </h1>
+          <h1 className="scale-[0.9]">wpm</h1>
+        </div>
+        <div className="flex gap-1">
+          <h1>
+            47
+          </h1>
+          <h1 className="scale-[0.9]">%</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-2 pl-6 pr-6">
@@ -27,10 +46,10 @@ const TopBar = ({ isAudioOff, setIsAudioOff }) => {
         <div
           className="text-[#001d29] hover:cursor-pointer"
           onClick={() => {
-            setIsAudioOff((prev) => !prev);
+            setIsAudioOn((prev) => !prev);
           }}
         >
-          {isAudioOff ? <IoMdVolumeOff /> : <IoMdVolumeHigh />}
+          {isAudioOn ? <IoMdVolumeHigh /> : <IoMdVolumeOff />}
         </div>
       </div>
     </div>

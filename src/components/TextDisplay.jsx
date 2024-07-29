@@ -30,7 +30,7 @@ function Word({ word, isWhiteSpace }) {
   );
 }
 
-const TextDisplay = ({ isAudioOffRef }) => {
+const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
   const wordsElementRef = useRef();
   const [reset, setReset] = useState(false);
   const [text, setText] = useState(["Loading..."]);
@@ -42,11 +42,13 @@ const TextDisplay = ({ isAudioOffRef }) => {
       if (e.key === "Enter") {
         // GResetData();
         setReset((prevResetVal) => !prevResetVal);
+        setIsTypingRef.current(false);
       } else {
         GHandleLetterKeyPress(e.key, wordsElementRef, setIsAtMiddle);
-        if (!isAudioOffRef.current) {
+        if (isAudioOnRef.current) {
           GPlayKeyPressAudio(e.key);
         }
+        setIsTypingRef.current(true);
       }
     });
 
