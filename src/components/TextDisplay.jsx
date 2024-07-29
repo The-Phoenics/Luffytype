@@ -37,6 +37,8 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
   const [fetching, setFetching] = useState(true);
   const [isAtMiddle, setIsAtMiddle] = useState(false);
 
+  const API_URL = import.meta.env.WORDS_API_URL || "http://localhost:3000/100"
+
   useEffect(() => {
     const keyPressEL = document.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
@@ -86,7 +88,7 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
 
   const appendText = async () => {
     try {
-      const res = await fetch("http://localhost:3000/100");
+      const res = await fetch(API_URL);
       if (res.ok) {
         const data = await res.json();
         setText((prev) => [...prev, ...data]);
@@ -101,7 +103,7 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
 
   const fetchTypingText = async () => {
     try {
-      const res = await fetch("http://localhost:3000/100");
+      const res = await fetch(API_URL);
       if (res.ok) {
         const data = await res.json();
         setText(data);
@@ -132,9 +134,15 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
 
       // remove cursor styling from current element
       if (data.isAtSpaceElement) {
-        GRemoveCursor(wordsElementRef.current.childNodes[data.currentWord].childNodes[1].childNodes[0]);
+        GRemoveCursor(
+          wordsElementRef.current.childNodes[data.currentWord].childNodes[1].childNodes[0]
+        );
       } else {
-        GRemoveCursor(wordsElementRef.current.childNodes[data.currentWord].childNodes[0].childNodes[data.currentLetter]);
+        GRemoveCursor(
+          wordsElementRef.current.childNodes[data.currentWord].childNodes[0].childNodes[
+            data.currentLetter
+          ]
+        );
       }
 
       for (let i = 0; i <= data.currentWord; i++) {

@@ -1,6 +1,6 @@
 import { IoMdVolumeHigh } from "react-icons/io";
 import { IoMdVolumeOff } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const TopBar = ({ isAudioOn, setIsAudioOn, isTyping }) => {
   const [isOpen, setIsOpen] = useState(false);

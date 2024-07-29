@@ -13,11 +13,11 @@
 
 @keyframes cursor-blink {
   0% {
-    opacity: 30%;
+    opacity: 0%;
   }
 
   30% {
-    opacity: 0%;
+    opacity: 30%;
   }
   100% {
     opacity: 100%;
@@ -31,7 +31,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  animation: cursor-blink 1000ms ease-out infinite;
+  animation: cursor-blink 800ms ease-out infinite reverse;
 }
 
 .words-element {
