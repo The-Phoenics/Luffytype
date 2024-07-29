@@ -131,11 +131,11 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
       fetchTypingText();
 
       // remove cursor styling from current element
-      const cursorElement =
-        wordsElementRef.current.childNodes[data.currentWord].childNodes[0].childNodes[
-          data.currentLetter
-        ];
-      GRemoveCursor(cursorElement);
+      if (data.isAtSpaceElement) {
+        GRemoveCursor(wordsElementRef.current.childNodes[data.currentWord].childNodes[1].childNodes[0]);
+      } else {
+        GRemoveCursor(wordsElementRef.current.childNodes[data.currentWord].childNodes[0].childNodes[data.currentLetter]);
+      }
 
       for (let i = 0; i <= data.currentWord; i++) {
         const wordContainer = wordsElementRef.current.childNodes[i];
