@@ -2,15 +2,11 @@ import "./App.css";
 import { useEffect, useRef, useState } from "react";
 import TopBar from "./components/TopBar";
 import TextDisplay from "./components/TextDisplay";
-import { GHandleLetterKeyPress, GHandleBackSpaceKeyPress } from "./KeyPressHandlers";
-import { GAddCursor } from "./TextUtils";
-import {  GToggleCtrlHeldDown } from "./Data";
 import Footer from "./components/Footer";
-import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "./KeyPressAudio";
 
 function App() {
-  const wordsElementRef = useRef();
-  const [reset, setReset] = useState(false);
+  // const wordsElementRef = useRef();
+  // const [reset, setReset] = useState(false);
   const [isAudioOff, setIsAudioOff] = useState(false);
   const isAudioOffRef = useRef(isAudioOff);
 
@@ -18,46 +14,46 @@ function App() {
     isAudioOffRef.current = isAudioOff;
   }, [isAudioOff]);
 
-  useEffect(() => {
-    const keyPressEL = document.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        // GResetData();
-        setReset((prevResetVal) => !prevResetVal);
-      } else {
-        GHandleLetterKeyPress(e.key, wordsElementRef);
-        if (!isAudioOffRef.current) {
-          GPlayKeyPressAudio(e.key);
-        }
-      }
-    });
+  // useEffect(() => {
+  //   const keyPressEL = document.addEventListener("keypress", (e) => {
+  //     if (e.key === "Enter") {
+  //       // GResetData();
+  //       setReset((prevResetVal) => !prevResetVal);
+  //     } else {
+  //       GHandleLetterKeyPress(e.key, wordsElementRef);
+  //       if (!isAudioOffRef.current) {
+  //         GPlayKeyPressAudio(e.key);
+  //       }
+  //     }
+  //   });
 
-    const ctrlKeyUpEL = document.addEventListener("keyup", (e) => {
-      if (e.key === "Control") {
-        GToggleCtrlHeldDown();
-      }
-    });
+  //   const ctrlKeyUpEL = document.addEventListener("keyup", (e) => {
+  //     if (e.key === "Control") {
+  //       GToggleCtrlHeldDown();
+  //     }
+  //   });
 
-    const keyDownEL = document.addEventListener("keydown", (e) => {
-      if (e.key === "Backspace") {
-        GHandleBackSpaceKeyPress(wordsElementRef);
-      }
-      if (e.key === "Control") {
-        GToggleCtrlHeldDown();
-      }
-    });
+  //   const keyDownEL = document.addEventListener("keydown", (e) => {
+  //     if (e.key === "Backspace") {
+  //       GHandleBackSpaceKeyPress(wordsElementRef);
+  //     }
+  //     if (e.key === "Control") {
+  //       GToggleCtrlHeldDown();
+  //     }
+  //   });
 
-    // load key press audios
-    GLoadKeyPressAudios();
+  //   // load key press audios
+  //   GLoadKeyPressAudios();
 
-    // initailize cursor at first letter
-    GAddCursor(wordsElementRef.current.childNodes[0].childNodes[0].childNodes[0]);
+  //   // initailize cursor at first letter
+  //   GAddCursor(wordsElementRef.current.childNodes[0].childNodes[0].childNodes[0]);
 
-    return () => {
-      document.removeEventListener("keypress", keyPressEL);
-      document.removeEventListener("keyup", ctrlKeyUpEL);
-      document.removeEventListener("keydown", keyDownEL);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("keypress", keyPressEL);
+  //     document.removeEventListener("keyup", ctrlKeyUpEL);
+  //     document.removeEventListener("keydown", keyDownEL);
+  //   };
+  // }, []);
 
   return (
     <>
@@ -66,7 +62,7 @@ function App() {
           <TopBar isAudioOff={isAudioOff} setIsAudioOff={setIsAudioOff} />
         </div>
         <main className="w-full flex justify-center  h-full">
-          <TextDisplay wordsElementRef={wordsElementRef} reset={reset} />
+          <TextDisplay isAudioOffRef={isAudioOff} />
         </main>
         <div className="absolute bottom-[1vh] left-0 w-full min-h-[50px] flex items-center justify-center bg-red font-bold">
           <Footer />

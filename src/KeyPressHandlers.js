@@ -1,4 +1,4 @@
-import { GData as data, GResetData } from "./Data";
+import { GData as data } from "./Data";
 import {
   GAddCursor,
   GStyleLetterAsPending,
@@ -79,7 +79,12 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
   }
 };
 
-export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef) => {
+export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtMiddle) => {
+  const isAtMiddleOfText = data.currentWord >= (data.wordsCount / 2);
+  if (isAtMiddleOfText) {
+    setIsAtMiddle(true);
+  }
+
   // handle letter element
   if (!data.isAtSpaceElement) {
     let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];

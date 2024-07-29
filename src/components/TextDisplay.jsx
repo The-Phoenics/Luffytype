@@ -1,36 +1,101 @@
-import { useEffect, useState } from "react";
 import { GResetData } from "../Data";
-import { FocusScrollCurrentWord } from "../KeyPressHandlers";
 import { GData as data } from "../Data";
+import { useEffect, useRef, useState } from "react";
+import { FocusScrollCurrentWord } from "../KeyPressHandlers";
 import { GMakeSpaceElementPending, GRemoveCursor, GStyleLetterAsPending } from "../TextUtils";
+import { GHandleLetterKeyPress, GHandleBackSpaceKeyPress } from "../KeyPressHandlers";
+import { GAddCursor } from "../TextUtils";
+import { GToggleCtrlHeldDown } from "../Data";
+import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "../KeyPressAudio";
 
 function Word({ word, isWhiteSpace }) {
   return (
     <span className={`flex mt-2 mb-2 ${isWhiteSpace ? "ml-1" : ""}`}>
       {word.split("").map((letter, index) => {
-        return <Letter key={index} letter={letter} isWhiteSpace={isWhiteSpace} />;
+        return (
+          // letter elements
+          <span
+            key={index}
+            className={`text-[clamp(1.2em,2.2vw, 4rem)] md:text-[1.7vw] font-medium min-w-[12px] font-NerdFont relative ${
+              isWhiteSpace ? "whitespace-element" : "letter-pending"
+            }`}
+          >
+            {letter}
+            {/* this is for cursor */}
+            <span></span>
+          </span>
+        );
       })}
     </span>
   );
 }
 
-function Letter({ letter, isWhiteSpace }) {
-  return (
-    <span
-      className={`text-[clamp(1.2em,2.2vw,3vw)] font-medium min-w-[12px] font-NerdFont relative ${
-        isWhiteSpace ? "whitespace-element" : "letter-pending"
-      }`}
-    >
-      {letter}
-      {/* this is for cursor */}
-      <span></span>
-    </span>
-  );
-}
+const TextDisplay = ({ isAudioOffRef }) => {
+  const wordsElementRef = useRef();
+  const [reset, setReset] = useState(false);
+  const [text, setText] = useState(["Loading..."]);
+  const [fetching, setFetching] = useState(true);
+  const [isAtMiddle, setIsAtMiddle] = useState(false);
 
-const TextDisplay = ({ wordsElementRef, reset }) => {
-  let [text, setText] = useState(["Loading..."]);
-  let [fetching, setFetching] = useState(true);
+  useEffect(() => {
+    const keyPressEL = document.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        // GResetData();
+        setReset((prevResetVal) => !prevResetVal);
+      } else {
+        GHandleLetterKeyPress(e.key, wordsElementRef, setIsAtMiddle);
+        if (!isAudioOffRef.current) {
+          GPlayKeyPressAudio(e.key);
+        }
+      }
+    });
+
+    const ctrlKeyUpEL = document.addEventListener("keyup", (e) => {
+      if (e.key === "Control") {
+        GToggleCtrlHeldDown();
+      }
+    });
+
+    const keyDownEL = document.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace") {
+        GHandleBackSpaceKeyPress(wordsElementRef);
+      }
+      if (e.key === "Control") {
+        GToggleCtrlHeldDown();
+      }
+    });
+
+    GLoadKeyPressAudios();
+    // initailize cursor at first letter
+    GAddCursor(wordsElementRef.current.childNodes[0].childNodes[0].childNodes[0]);
+
+    return () => {
+      document.removeEventListener("keypress", keyPressEL);
+      document.removeEventListener("keyup", ctrlKeyUpEL);
+      document.removeEventListener("keydown", keyDownEL);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isAtMiddle) {
+      appendText();
+    }
+  }, [isAtMiddle]);
+
+  const appendText = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/100");
+      if (res.ok) {
+        const data = await res.json();
+        setText((prev) => [...prev, ...data]);
+        setIsAtMiddle(false);
+      } else {
+        throw new Error("Response not OK");
+      }
+    } catch (err) {
+      console.log(`Failed to fetch data: ${err}`);
+    }
+  };
 
   const fetchTypingText = async () => {
     try {
@@ -49,8 +114,14 @@ const TextDisplay = ({ wordsElementRef, reset }) => {
 
   useEffect(() => {
     fetchTypingText();
-    GResetData();
   }, []);
+
+  useEffect(() => {
+    const wordsNodeElement = wordsElementRef.current.childNodes;
+    const currentWordNodeElement = wordsNodeElement[data.currentWord].childNodes[0].childNodes;
+    data.letterCountInCurrentWord = currentWordNodeElement.length;
+    data.wordsCount = wordsNodeElement.length;
+  }, [text]);
 
   useEffect(() => {
     if (!fetching) {
@@ -70,7 +141,6 @@ const TextDisplay = ({ wordsElementRef, reset }) => {
         wordContainer.childNodes[0].childNodes.forEach((letter) => {
           GStyleLetterAsPending(letter);
         });
-
         // reset the space element
         const spaceElement = wordContainer.childNodes[1];
         GMakeSpaceElementPending(spaceElement);
