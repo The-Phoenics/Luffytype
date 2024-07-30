@@ -9,6 +9,8 @@ import { GToggleCtrlHeldDown } from "../Data";
 import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "../KeyPressAudio";
 
 function Word({ word, isWhiteSpace }) {
+
+
   return (
     <span className={`flex mt-2 mb-2 ${isWhiteSpace ? "ml-1" : ""}`}>
       {word.split("").map((letter, index) => {
