@@ -9,8 +9,6 @@ import { GToggleCtrlHeldDown } from "../Data";
 import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "../KeyPressAudio";
 
 function Word({ word, isWhiteSpace }) {
-
-
   return (
     <span className={`flex mt-2 mb-2 ${isWhiteSpace ? "ml-1" : ""}`}>
       {word.split("").map((letter, index) => {
@@ -39,9 +37,9 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
   const [fetching, setFetching] = useState(true);
   const [isAtMiddle, setIsAtMiddle] = useState(false);
 
-  const API_URL = import.meta.env.WORDS_API_URL || "http://localhost:3000/100"
-
   useEffect(() => {
+    fetchTypingText();
+
     const keyPressEL = document.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         // GResetData();
@@ -90,7 +88,7 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
 
   const appendText = async () => {
     try {
-      const res = await fetch(API_URL);
+      const res = await fetch("https://random-word-api.herokuapp.com/word?number=100");
       if (res.ok) {
         const data = await res.json();
         setText((prev) => [...prev, ...data]);
@@ -105,7 +103,7 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
 
   const fetchTypingText = async () => {
     try {
-      const res = await fetch(API_URL);
+      const res = await fetch("https://random-word-api.herokuapp.com/word?number=100");
       if (res.ok) {
         const data = await res.json();
         setText(data);
@@ -117,10 +115,6 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef }) => {
       console.log(`Failed to fetch data: ${err}`);
     }
   };
-
-  useEffect(() => {
-    fetchTypingText();
-  }, []);
 
   useEffect(() => {
     const wordsNodeElement = wordsElementRef.current.childNodes;
