@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: ProtoNerdFontMono;
+  src: url(./font/0xProtoNerdFontMono-Regular.ttf);
+}
