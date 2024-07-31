@@ -2,13 +2,18 @@ import { IoMdVolumeHigh } from "react-icons/io";
 import { IoMdVolumeOff } from "react-icons/io";
 import { useState } from "react";
 
-const TopBar = ({ isAudioOn, setIsAudioOn, isTyping }) => {
+const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currLang, setCurrLang] = useState("Commonly Misspelled");
   const [speed, setSpeed] = useState(83);
   const [accuracy, setAccuracy] = useState(47);
 
   useState(() => {}, [currLang, isOpen]);
+
+  useState(() => {
+    setSpeed(0);
+    setAccuracy(0);
+  }, [reset])
 
   if (isTyping) {
     return (
@@ -24,7 +29,7 @@ const TopBar = ({ isAudioOn, setIsAudioOn, isTyping }) => {
       </div>
     );
   }
-
+  
   return (
     <div className="p-2 pl-6 pr-6 md:scale-125">
       <div className="flex items-center justify-center gap-4 rounded-3xl bg-[#ffd56b] p-2 pl-6 pr-6 font-mono mt-2 text-md ">

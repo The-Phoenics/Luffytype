@@ -7,6 +7,12 @@ export let GData = {
   isAtSpaceElement: false,
 };
 
+let StatsData = {
+  wordsFinished: 0,
+  wordsWrong: 0,
+  correctWords: 0,
+}
+
 export const GResetData = () => {
   GData.wordsCount = 0;
   GData.currentWord = 0;
