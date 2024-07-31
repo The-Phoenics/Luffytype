@@ -3,9 +3,9 @@ const alphabets = "abcdefghijklmnopqrstuvwxyz".split(""); // array of alphabet c
 
 export function GLoadKeyPressAudios() {
   alphabets.forEach((letter) => {
-    audios.set(letter, new Audio(`/src/audio/${letter}.wav`));
+    audios.set(letter, new Audio(`/audio/${letter}.wav`));
   });
-  audios.set("space", new Audio("/src/audio/space.wav"));
+  audios.set("space", new Audio("/audio/space.wav"));
 }
 
 export function GPlayKeyPressAudio(letter) {
