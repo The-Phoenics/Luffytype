@@ -1,7 +1,7 @@
 import { GResetData } from "../Data";
 import { GData as data } from "../Data";
 import { useEffect, useRef, useState } from "react";
-import { FocusScrollCurrentWord } from "../KeyPressHandlers";
+import { FocusScrollCurrentWord, GetCurrentWordNode } from "../KeyPressHandlers";
 import { GMakeSpaceElementPending, GRemoveCursor, GStyleLetterAsPending } from "../TextUtils";
 import { GHandleLetterKeyPress, GHandleBackSpaceKeyPress } from "../KeyPressHandlers";
 import { GAddCursor } from "../TextUtils";
@@ -97,14 +97,13 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef, reset, setReset }) => {
       console.log(`Failed to fetch data: ${err}`);
     } finally {
       setFetching(false);
-      console.log("fetching inside fetch func: ", fetching);
     }
   };
 
   useEffect(() => {
     const wordsNodeElement = wordsElementRef.current.childNodes;
-    const currentWordNodeElement = wordsNodeElement[data.currentWord].childNodes[0].childNodes;
-    data.letterCountInCurrentWord = currentWordNodeElement.length;
+    const currentWordNode = GetCurrentWordNode(wordsElementRef);
+    data.letterCountInCurrentWord = currentWordNode.length;
     data.wordsCount = wordsNodeElement.length;
   }, [text]);
 
