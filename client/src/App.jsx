@@ -10,6 +10,11 @@ function App() {
   const isAudioOnRef = useRef(isAudioOn);
   const [isTyping, setIsTyping] = useState(false);
   const setIsTypingRef = useRef(setIsTyping);
+  const [statsData, setStatsData] = useState({
+    wordsFinished: 0,
+    wordsWrong: 0,
+    correctWords: 0,
+  })
 
   useEffect(() => {
     isAudioOnRef.current = isAudioOn;
