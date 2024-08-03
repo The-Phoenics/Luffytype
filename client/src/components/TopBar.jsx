@@ -1,16 +1,38 @@
 import { IoMdVolumeHigh } from "react-icons/io";
 import { IoMdVolumeOff } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset }) => {
+const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset, statsData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currLang, setCurrLang] = useState("Commonly Misspelled");
   const [speed, setSpeed] = useState(83);
   const [accuracy, setAccuracy] = useState(47);
+  const evalTimerRef = useRef(null);
+  const startTimeRef = useRef();
 
-  useState(() => {}, [currLang, isOpen]);
+  console.log('data: ', statsData) // TODO: statsData updating fine here with time
 
-  useState(() => {
+  const evaluateStatsData = () => {
+    console.log(statsData) // // TODO: here statsData is always same at its initial value
+    const elapsedTimeInSeconds = Math.round(((new Date()) - startTimeRef.current) / 1000);
+    const calcSpeed = statsData.wordsFinished / (elapsedTimeInSeconds * 60)
+    setSpeed(calcSpeed)
+  }
+
+  useEffect(() => {
+    if (isTyping) {
+      startTimeRef.current = new Date()
+      evalTimerRef.current = setInterval(() => {
+        evaluateStatsData();
+      }, 2000);
+    } else {
+      clearInterval(evalTimerRef.current);
+    }
+  }, [isTyping])
+
+  useEffect(() => { }, [currLang, isOpen]);
+
+  useEffect(() => {
     setSpeed(0);
     setAccuracy(0);
   }, [reset])
@@ -29,7 +51,7 @@ const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset }) => {
       </div>
     );
   }
-  
+
   return (
     <div className="p-2 pl-6 pr-6 md:scale-125">
       <div className="flex items-center justify-center gap-4 rounded-3xl bg-[#ffd56b] p-2 pl-6 pr-6 font-mono mt-2 text-md ">

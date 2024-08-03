@@ -91,7 +91,7 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
   }
 };
 
-export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtMiddle) => {
+export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtMiddle, statsData, setStatsData) => {
   const isAtMiddleOfText = data.currentWord >= data.wordsCount / 2;
   if (isAtMiddleOfText) {
     setIsAtMiddle(true);
@@ -140,6 +140,12 @@ export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtM
     data.currentWord++;
     data.currentLetter = 0;
     data.isAtSpaceElement = false;
+
+    // increment number of words completed
+    setStatsData(prev => ({
+      ...prev,
+      wordsFinished: prev.wordsFinished + 1
+    }))
 
     let currentLetterElement = GetCurrentLetterNode(wordsElementRef);
     data.letterCountInCurrentWord = currentWordElement.childNodes.length;
