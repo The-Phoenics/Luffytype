@@ -27,6 +27,8 @@ function App() {
       wordsFinished: 0,
       wordsWrong: 0,
       correctWords: 0,
+      correctLettersCount: 0,
+      incorrectLettersCount: 0
     })
   }, [reset])
 
@@ -37,7 +39,7 @@ function App() {
           <TopBar isTyping={isTyping} isAudioOn={isAudioOn} setIsAudioOn={setIsAudioOn} reset={reset} statsData={statsData} />
         </div>
         <main className="w-full flex justify-center  h-full">
-          <TextDisplay isAudioOnRef={isAudioOnRef} setIsTypingRef={setIsTypingRef} reset={reset} setReset={setReset} statsData={statsData} setStatsData={setStatsData} />
+          <TextDisplay isAudioOnRef={isAudioOnRef} setIsTypingRef={setIsTypingRef} reset={reset} setReset={setReset} setStatsData={setStatsData} />
         </main>
         <div className="absolute bottom-[1vh] left-0 w-full min-h-[50px] flex items-center justify-center bg-red font-bold">
           <Footer isTyping={isTyping} />

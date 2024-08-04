@@ -91,7 +91,7 @@ export const GHandleBackSpaceKeyPress = (wordsElementRef) => {
   }
 };
 
-export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtMiddle, statsData, setStatsData) => {
+export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtMiddle, setStatsData) => {
   const isAtMiddleOfText = data.currentWord >= data.wordsCount / 2;
   if (isAtMiddleOfText) {
     setIsAtMiddle(true);
@@ -99,7 +99,7 @@ export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtM
 
   // handle letter element
   if (!data.isAtSpaceElement) {
-    let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];    
+    let currentWordElement = wordsElementRef.current.childNodes[data.currentWord].childNodes[0];
     let currentLetterElement = currentWordElement.childNodes[data.currentLetter];
     FocusScrollCurrentWord(currentWordElement);
     data.letterCountInCurrentWord = currentWordElement.childNodes.length;
@@ -108,11 +108,20 @@ export const GHandleLetterKeyPress = (pressedKeyValue, wordsElementRef, setIsAtM
 
     if (pressedKeyValue == currentLetterElement.innerText) {
       GStyleLetterAsCorrect(currentLetterElement);
+      setStatsData(prev => ({
+        ...prev,
+        correctLettersCount: prev.correctLettersCount + 1
+      }))
     } else {
       GStyleLetterAsIncorrect(currentLetterElement);
+      setStatsData(prev => ({
+        ...prev,
+        incorrectLettersCount: prev.incorrectLettersCount + 1
+      }))
     }
 
     data.currentLetter++;
+
     if (data.letterCountInCurrentWord === data.currentLetter) {
       // when at last letter of word
       data.isAtSpaceElement = true;

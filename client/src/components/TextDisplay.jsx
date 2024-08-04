@@ -8,7 +8,7 @@ import { GAddCursor } from "../TextUtils";
 import { GToggleCtrlHeldDown } from "../Data";
 import { GLoadKeyPressAudios, GPlayKeyPressAudio } from "../KeyPressAudio";
 
-const TextDisplay = ({ isAudioOnRef, setIsTypingRef, reset, setReset, statsData, setStatsData }) => {
+const TextDisplay = ({ isAudioOnRef, setIsTypingRef, reset, setReset, setStatsData }) => {
     const wordsElementRef = useRef();
     const [text, setText] = useState(["Loading..."]);
     const [fetching, setFetching] = useState(true);

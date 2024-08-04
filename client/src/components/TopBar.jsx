@@ -13,15 +13,25 @@ const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset, statsData }) => {
   const calculateSpeed = useCallback(() => {
     const elapsedTimeInSeconds = Math.round(((new Date()) - startTimeRef.current) / 1000);
     const calcSpeed = statsData.wordsFinished / (elapsedTimeInSeconds / 60)
-    setSpeed(Math.floor(calcSpeed))
+    return Math.floor(calcSpeed)
   }, [statsData])
+
+  const calculateAccuracy = useCallback(() => {
+    const totalLettersTyped = statsData.correctLettersCount + statsData.incorrectLettersCount;
+    if (totalLettersTyped === 0) {
+      return 100;
+    }
+    const accuracyPercentage = (statsData.correctLettersCount / totalLettersTyped) * 100;
+    return Math.round(accuracyPercentage);
+  }, [statsData]);
 
   useEffect(() => {
     if (isTyping) {
       startTimeRef.current = new Date()
       evalTimerRef.current = setInterval(() => {
-        calculateSpeed();
-      }, 1500);
+        setSpeed(calculateSpeed());
+        setAccuracy(calculateAccuracy());
+      }, 1000);
     } else {
       clearInterval(evalTimerRef.current);
     }
@@ -33,8 +43,9 @@ const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset, statsData }) => {
     clearInterval(evalTimerRef.current);
     if (isTyping) {
       evalTimerRef.current = setInterval(() => {
-        calculateSpeed();
-      }, 1500);
+        setSpeed(calculateSpeed());
+        setAccuracy(calculateAccuracy());
+      }, 1000);
     }
   }, [statsData])
 
