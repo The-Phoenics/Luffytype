@@ -1,6 +1,6 @@
 import { IoMdVolumeHigh } from "react-icons/io";
 import { IoMdVolumeOff } from "react-icons/io";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset, statsData }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,25 +10,33 @@ const TopBar = ({ isAudioOn, setIsAudioOn, isTyping, reset, statsData }) => {
   const evalTimerRef = useRef(null);
   const startTimeRef = useRef();
 
-  console.log('data: ', statsData) // TODO: statsData updating fine here with time
-
-  const evaluateStatsData = () => {
-    console.log(statsData) // // TODO: here statsData is always same at its initial value
+  const calculateSpeed = useCallback(() => {
     const elapsedTimeInSeconds = Math.round(((new Date()) - startTimeRef.current) / 1000);
-    const calcSpeed = statsData.wordsFinished / (elapsedTimeInSeconds * 60)
-    setSpeed(calcSpeed)
-  }
+    const calcSpeed = statsData.wordsFinished / (elapsedTimeInSeconds / 60)
+    setSpeed(Math.floor(calcSpeed))
+  }, [statsData])
 
   useEffect(() => {
     if (isTyping) {
       startTimeRef.current = new Date()
       evalTimerRef.current = setInterval(() => {
-        evaluateStatsData();
-      }, 2000);
+        calculateSpeed();
+      }, 1500);
     } else {
       clearInterval(evalTimerRef.current);
     }
   }, [isTyping])
+
+  // re-start the timer with the new definition of calculateSpeed
+  // function, everytime statsData changes
+  useEffect(() => {
+    clearInterval(evalTimerRef.current);
+    if (isTyping) {
+      evalTimerRef.current = setInterval(() => {
+        calculateSpeed();
+      }, 1500);
+    }
+  }, [statsData])
 
   useEffect(() => { }, [currLang, isOpen]);
 

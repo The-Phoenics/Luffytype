@@ -14,6 +14,8 @@ function App() {
     wordsFinished: 0,
     wordsWrong: 0,
     correctWords: 0,
+    correctLettersCount: 0,
+    incorrectLettersCount: 0
   })
 
   useEffect(() => {
@@ -27,11 +29,6 @@ function App() {
       correctWords: 0,
     })
   }, [reset])
-
-  // debug
-  useEffect(() => {
-    // console.log(statsData)
-  }, [statsData])
 
   return (
     <>

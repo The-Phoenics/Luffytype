@@ -20,8 +20,9 @@ const TextDisplay = ({ isAudioOnRef, setIsTypingRef, reset, setReset, statsData,
             setReset((prevResetVal) => !prevResetVal);
             setIsTypingRef.current(false);
         } else {
+            // handle key presses while not fetching
             if (!fetchingRef.current) {
-                GHandleLetterKeyPress(e.key, wordsElementRef, setIsAtMiddle, statsData, setStatsData);
+                GHandleLetterKeyPress(e.key, wordsElementRef, setIsAtMiddle, setStatsData);
                 if (isAudioOnRef.current) {
                     GPlayKeyPressAudio(e.key);
                 }
