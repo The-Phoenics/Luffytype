@@ -6,7 +6,7 @@
 
 ---
 
-### Features/Todos
+### Features
 
 - [x] Blinking caret
 - [x] Reset typing
